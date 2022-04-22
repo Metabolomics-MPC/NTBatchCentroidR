@@ -51,14 +51,5 @@ if(is.na(settings$cores) | settings$cores == 1) {
 # source required functions ----------------------------------------------------
 source("R/01_Centroiding.R")
 
-profile_files <- list.files(settings$files_in,
-                            pattern = ".mzML$",
-                            full.names = TRUE)
-
-for(profile_file in profile_files) {
-  
-  perform_centroiding(profile_file,
-                      outdir = settings$files_out,
-                      format = settings$format)
-  
-}
+# perform centroiding on folder specified in settings
+perform_centroiding(settings)
