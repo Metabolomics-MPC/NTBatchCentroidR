@@ -1,26 +1,19 @@
 # function to perform centroiding on all files
-perform_centroiding <- function(settings) {
+perform_centroiding <- function(settings, BPPARAM = SerialParam()) {
+  
+  # register specific parallel backend
+  register(bpstart(BPParam))
   
   # get files for conversion
   profile_files <- list.files(settings$files_in,
                               pattern = ".mzML$",
                               full.names = TRUE)
   
-  # TODO switch from for loop to bplapply
-  
-  # create progress bar
-  pb = txtProgressBar(min = 0, max = length(profile_files), initial = 0)
-  
-  for(i in 1:length(profile_files)) {
-    
-    .perform_centroiding_single(profile_files[i],
-                                outdir = settings$files_out,
-                                format = settings$format)
-    
-    setTxtProgressBar(pb,i)
-    
-  }
-  close(pb)
+  # perform centroiding on each file
+  bplapply(profile_files,
+           .perform_centroiding_single,
+           outdir = settings$files_out,
+           format = settings$format)
   
 }
 
@@ -28,7 +21,17 @@ perform_centroiding <- function(settings) {
 # function to perform centroiding on a single file
 .perform_centroiding_single <- function(file_in,
                                         outdir = NA,
-                                        format = "mzml") {
+                                        format = "mzml",
+                                        ms1_smooth_method = "SavitzkyGolay",
+                                        ms1_smooth_halfWindowSize = 6L,
+                                        ms1_pick_halfWindowSize = 3L,
+                                        ms1_pick_snr = 0L,
+                                        ms1_pick_refineMz = "descendPeak",
+                                        ms1_pick_signalPercentage = 33,
+                                        ms2_pick_halfWindowSize = 4,
+                                        ms2_pick_snr = 1,
+                                        ms2_pick_refineMz = "descendPeak",
+                                        ms2_pick_signalPercentage = 50) {
   
   # construct file_out
   file_out <- paste0(outdir, "/", basename(file_in))
@@ -48,23 +51,23 @@ perform_centroiding <- function(settings) {
       # Perform smoothing and centroiding only on MS1
       suppressWarnings(
         ms_centroid_data <- pickPeaks(smooth(ms_profile_data,
-                                             method = "SavitzkyGolay",
-                                             halfWindowSize = 6L,
+                                             method = ms1_smooth_method,
+                                             halfWindowSize = ms1_smooth_halfWindowSize,
                                              msLevel. = 1L),
-                                      halfWindowSize = 3L,
-                                      SNR = 0L,
-                                      refineMz = "descendPeak",
-                                      signalPercentage = 33,
+                                      halfWindowSize = ms1_pick_halfWindowSize,
+                                      SNR = ms1_pick_snr,
+                                      refineMz = ms1_pick_refineMz,
+                                      signalPercentage = ms1_pick_signalPercentage,
                                       msLevel. = 1L)
       )
       
       # Perform centroid on MS1 and MS2
       suppressWarnings(
         ms_centroid_data <- pickPeaks(ms_centroid_data,
-                                      halfWindowSize = 4L,
-                                      SNR = 1L,
-                                      refineMz = "descendPeak",
-                                      signalPercentage = 50,
+                                      halfWindowSize = ms2_pick_halfWindowSize,
+                                      SNR = ms2_pick_snr,
+                                      refineMz = ms2_pick_refineMz,
+                                      signalPercentage = ms2_pick_signalPercentage,
                                       msLevel. = 2L)
       )
       
@@ -77,5 +80,7 @@ perform_centroiding <- function(settings) {
               file = file_out,
               outformat = format,
               copy = TRUE)
+  
+  TRUE
   
 }

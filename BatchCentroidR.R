@@ -36,9 +36,13 @@ if(is.na(settings$cores) | settings$cores == 1) {
   BPParam <- SerialParam()
 } else {
   if(.Platform$OS.type == "windows") {
-    BPParam <- SnowParam(workers = settings$cores)
+    BPParam <- SnowParam(workers = settings$cores,
+                         tasks = 5,
+                         progressbar = TRUE)
   } else {
-    BPParam <- MulticoreParam(workers = settings$cores)
+    BPParam <- MulticoreParam(workers = settings$cores,
+                              tasks = 5,
+                              progressbar = TRUE)
   }
 }
 
@@ -52,4 +56,4 @@ if(is.na(settings$cores) | settings$cores == 1) {
 source("R/01_Centroiding.R")
 
 # perform centroiding on folder specified in settings
-perform_centroiding(settings)
+perform_centroiding(settings, BPPARAM = BPParam)
