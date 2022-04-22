@@ -1,0 +1,23 @@
+# ==============================================================================
+# general parameter
+#
+# General parameter settings such as number of cores
+# ==============================================================================
+cores: 1
+
+# ==============================================================================
+# data input
+#
+# Folder with profile mzML files to work one
+# ==============================================================================
+# path to profile mzML files
+files_in: "mzML_profile"
+
+# ==============================================================================
+# data output
+#
+# Folder to which centroid files shall be written
+# ==============================================================================
+# path to folder for centroid files
+files_out: "mzML_centroid_MSnbase"
+format: "mzml" # either mzml or mzxml, mzml is prefered
