@@ -2,7 +2,7 @@
 perform_centroiding <- function(settings, BPPARAM = SerialParam()) {
   
   # register specific parallel backend
-  register(bpstart(BPParam))
+  #register(bpstart(BPParam))
   
   # get files for conversion
   profile_files <- list.files(settings$files_in,
@@ -12,6 +12,7 @@ perform_centroiding <- function(settings, BPPARAM = SerialParam()) {
   # perform centroiding on each file
   bplapply(profile_files,
            .perform_centroiding_single,
+           BPPARAM = BPPARAM,
            outdir = settings$files_out,
            format = settings$format)
   
@@ -32,6 +33,9 @@ perform_centroiding <- function(settings, BPPARAM = SerialParam()) {
                                         ms2_pick_snr = 1,
                                         ms2_pick_refineMz = "descendPeak",
                                         ms2_pick_signalPercentage = 50) {
+  
+  # workaround until bplapply loads MSnbase
+  suppressWarnings(library(MSnbase))
   
   # construct file_out
   file_out <- paste0(outdir, "/", basename(file_in))
