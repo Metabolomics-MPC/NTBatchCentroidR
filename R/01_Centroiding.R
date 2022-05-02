@@ -1,5 +1,8 @@
 # function to perform centroiding on all files
-perform_centroiding <- function(settings, BPPARAM = SerialParam()) {
+perform_centroiding <- function(input,
+                                output,
+                                settings,
+                                BPPARAM = SerialParam()) {
   
   # register specific parallel backend
   #register(bpstart(BPParam))

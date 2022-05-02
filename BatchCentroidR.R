@@ -12,12 +12,48 @@
 args = commandArgs(trailingOnly=TRUE)
 
 # check if args is supplied, else run demote data
-if(is.na(args[1])) {
+if(!length(args)) {
+  
   message("Running demo data!")
-  settings_yaml <- "settings.yaml"
+  input <- "mzML_profile"
+  output <- "mzML_centroid_MSnbase"
+  settings_file <- paste0(input, "/settings.yaml")
+  
 } else {
-  settings_yaml <- args[1]
+  
+  # check for correct length of arguments
+  if(!length(args) == 2) {
+    
+  }
+  
+  # check if input folder exists
+  if(!dir.exists(args[1])) {
+    stop(paste0("Input folder ", args[1], " does not exist!"))
+  }
+  
+  # check if settings file is present in input
+  if(!file.exists(paste0(args[1], "/settings.yaml"))) {
+    stop("Missing settings.yaml in input folder!")
+  }
+  
+  # check if mzML files exist in input folder
+  mzML_files <- list.files(args[1],
+                           pattern = ".mzML$")
+  
+  if(!length(mzML_files)) {
+    stop("No .mzML files found in input folder")
+  }
+  
+  # check for output folder and create if not present
+  if(!dir.exists(args[2])) {
+    dir.create(args[2])
+  }
+  
+  input <- args[1]
+  output <- args[2]
+  settings_file <- paste0(input, "/settings.yaml")
 }
+
 
 # ==============================================================================
 # 0. Setup 
@@ -26,7 +62,7 @@ if(is.na(args[1])) {
 source("R/00_Setup.R")
 
 # Read in settings of yaml file ------------------------------------------------
-settings <- read_yaml(settings_yaml)
+settings <- read_yaml(settings_file)
 
 # validate settings ------------------------------------------------------------
 #settings <- validateSettings(settings)
@@ -56,4 +92,7 @@ if(is.na(settings$cores) | settings$cores == 1) {
 source("R/01_Centroiding.R")
 
 # perform centroiding on folder specified in settings
-perform_centroiding(settings, BPPARAM = BPParam)
+perform_centroiding(input,
+                    output,
+                    settings,
+                    BPPARAM = BPParam)
