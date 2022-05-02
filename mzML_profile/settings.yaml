@@ -1,0 +1,39 @@
+# ==============================================================================
+# general parameter
+#
+# General parameter settings such as number of cores
+# ==============================================================================
+cores: 4
+
+# ==============================================================================
+# data input
+#
+# Folder with profile mzML files to work one
+# ==============================================================================
+# path to profile mzML files
+files_in: "mzML_profile"
+
+# ==============================================================================
+# data output
+#
+# Folder to which centroid files shall be written
+# ==============================================================================
+# path to folder for centroid files
+files_out: "mzML_centroid_MSnbase"
+format: "mzml" # either mzml or mzxml, mzml is prefered
+
+# ==============================================================================
+# Processing parameter
+#
+# set MS1 and MS2 smoothing and peak picking parameter
+# ==============================================================================
+ms1_smooth_method: "SavitzkyGolay"
+ms1_smooth_halfWindowSize: 6
+ms1_pick_halfWindowSize: 3
+ms1_pick_snr: 0
+ms1_pick_refineMz: "descendPeak"
+ms1_pick_signalPercentage: 33
+ms2_pick_halfWindowSize: 4
+ms2_pick_snr: 1
+ms2_pick_refineMz: "descendPeak"
+ms2_pick_signalPercentage: 50
