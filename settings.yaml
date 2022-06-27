@@ -11,7 +11,7 @@ cores: 4
 # Folder with profile mzML files to work one
 # ==============================================================================
 # path to profile mzML files
-files_in: "mzML_profile"
+#files_in: "mzML_profile"
 
 # ==============================================================================
 # data output
@@ -19,7 +19,7 @@ files_in: "mzML_profile"
 # Folder to which centroid files shall be written
 # ==============================================================================
 # path to folder for centroid files
-files_out: "mzML_centroid_MSnbase"
+#files_out: "mzML_centroid_MSnbase"
 format: "mzml" # either mzml or mzxml, mzml is prefered
 
 # ==============================================================================

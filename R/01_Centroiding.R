@@ -16,8 +16,18 @@ perform_centroiding <- function(input,
   bplapply(profile_files,
            .perform_centroiding_single,
            BPPARAM = BPPARAM,
-           outdir = settings$files_out,
-           format = settings$format)
+           outdir = output,
+           format = settings$format,
+           ms1_smooth_method = settings$ms1_smooth_method,
+           ms1_smooth_halfWindowSize = settings$ms1_smooth_halfWindowSize,
+           ms1_pick_halfWindowSize = settings$ms1_pick_halfWindowSize,
+           ms1_pick_snr = settings$ms1_pick_snr,
+           ms1_pick_refineMz = settings$ms1_pick_refineMz,
+           ms1_pick_signalPercentage = settings$ms1_pick_signalPercentage,
+           ms2_pick_halfWindowSize = settings$ms2_pick_halfWindowSize,
+           ms2_pick_snr = settings$ms2_pick_snr,
+           ms2_pick_refineMz = settings$ms2_pick_refineMz,
+           ms2_pick_signalPercentage = settings$ms2_pick_signalPercentage)
   
 }
 

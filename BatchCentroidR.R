@@ -23,7 +23,7 @@ if(!length(args)) {
   
   # check for correct length of arguments
   if(!length(args) == 2) {
-    
+    stop("Input and Output folder are required")
   }
   
   # check if input folder exists
