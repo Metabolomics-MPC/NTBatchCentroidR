@@ -52,6 +52,10 @@ if(!length(args)) {
   input <- args[1]
   output <- args[2]
   settings_file <- paste0(input, "/settings.yaml")
+  
+  print(paste0("Processing files in: ", input))
+  print(paste0("Storing files in: ", output))
+  print(paste0("Using settings from: ", settings_file))
 }
 
 
