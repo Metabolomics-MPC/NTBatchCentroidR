@@ -75,17 +75,28 @@ perform_centroiding <- function(input,
       if(any(msLevel(ms_profile_data) > 1L)) {
         
         # Perform smoothing and centroiding only on MS1
+        # suppressWarnings(
+        #   ms_centroid_data <- pickPeaks(smooth(ms_profile_data,
+        #                                        method = ms1_smooth_method,
+        #                                        halfWindowSize = ms1_smooth_halfWindowSize,
+        #                                        msLevel. = 1L),
+        #                                 halfWindowSize = ms1_pick_halfWindowSize,
+        #                                 SNR = ms1_pick_snr,
+        #                                 refineMz = ms1_pick_refineMz,
+        #                                 signalPercentage = ms1_pick_signalPercentage,
+        #                                 msLevel. = 1L)
+        # )
+        
+        # Perform centroiding only on MS1
         suppressWarnings(
-          ms_centroid_data <- pickPeaks(smooth(ms_profile_data,
-                                               method = ms1_smooth_method,
-                                               halfWindowSize = ms1_smooth_halfWindowSize,
-                                               msLevel. = 1L),
+          ms_centroid_data <- pickPeaks(ms_profile_data,
                                         halfWindowSize = ms1_pick_halfWindowSize,
                                         SNR = ms1_pick_snr,
                                         refineMz = ms1_pick_refineMz,
                                         signalPercentage = ms1_pick_signalPercentage,
                                         msLevel. = 1L)
         )
+        
         
         # Perform centroid on MS1 and MS2
         suppressWarnings(
