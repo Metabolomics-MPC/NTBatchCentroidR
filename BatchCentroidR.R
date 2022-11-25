@@ -100,3 +100,14 @@ perform_centroiding(input,
                     output,
                     settings,
                     BPPARAM = BPParam)
+
+# ==============================================================================
+# 2. intensity QC plots
+# ==============================================================================
+# source required functions ----------------------------------------------------
+source("R/02_qcplot.R")
+
+# perform QC plotting
+qc_plot(output,
+        settings,
+        BPPARAM = BPParam)
