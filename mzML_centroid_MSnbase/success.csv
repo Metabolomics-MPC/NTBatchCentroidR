@@ -1,2 +1,2 @@
-"path","success","perc_int"
-"QC_001.mzML",TRUE,207
+"path","success","ms1","ms2"
+"QC_001.mzML",TRUE,207,26

@@ -8,31 +8,62 @@ qc_plot <- function(output,
                                pattern = ".mzML$",
                                full.names = TRUE)
   
-  # create folder for output
-  if(!dir.exists(paste0(output, "/qc_plots"))) {
-    dir.create(paste0(output, "/qc_plots"))
+  # perform qc plots on MS1 data
+  if(settings$ms1_qc) {
+    
+    # create folder for output
+    if(!dir.exists(paste0(output, "/ms1_qc_plots"))) {
+      dir.create(paste0(output, "/ms1_qc_plots"))
+    }
+    
+    # perform centroiding on each file
+    percentile <- bplapply(centroid_files,
+                           .qc_plot_single,
+                           BPPARAM = SerialParam(),
+                           outdir = paste0(output, "/ms1_qc_plots"),
+                           msLevel = 1L)
+    
+    
+    success_data <- read.csv(paste0(output, "/success.csv"))
+    
+    write.csv(cbind(success_data,
+                    ms1 = unlist(percentile)),
+              paste0(output, "/success.csv"),
+              row.names = FALSE)
+    
   }
   
-  # perform centroiding on each file
-  percentile <- bplapply(centroid_files,
-                         .qc_plot_single,
-                         BPPARAM = SerialParam(),
-                         outdir = paste0(output, "/qc_plots"))
-  
-  
-  success_data <- read.csv(paste0(output, "/success.csv"))
-  
-  write.csv(cbind(success_data,
-                  perc_int = unlist(percentile)),
-            paste0(output, "/success.csv"),
-            row.names = FALSE)
-  
+  # perform qc plots on MS1 data
+  if(settings$ms2_qc) {
+    
+    # create folder for output
+    if(!dir.exists(paste0(output, "/ms2_qc_plots"))) {
+      dir.create(paste0(output, "/ms2_qc_plots"))
+    }
+    
+    # perform centroiding on each file
+    percentile <- bplapply(centroid_files,
+                           .qc_plot_single,
+                           BPPARAM = SerialParam(),
+                           outdir = paste0(output, "/ms2_qc_plots"),
+                           msLevel = 2L)
+    
+    
+    success_data <- read.csv(paste0(output, "/success.csv"))
+    
+    write.csv(cbind(success_data,
+                    ms2 = unlist(percentile)),
+              paste0(output, "/success.csv"),
+              row.names = FALSE)
+    
+  }
 }
 
 # function to perform centroiding on a single file
 .qc_plot_single <- function(file_in,
                             outdir = NA,
-                            percentile = 0.05) {
+                            percentile = 0.05,
+                            msLevel = 1L) {
   
   gc()
   
@@ -51,7 +82,7 @@ qc_plot <- function(output,
     
     # read data and get intensities of all centroids
     ms_centroid_data <- readMSData(file_in,
-                                   msLevel = 1L,
+                                   msLevel = msLevel,
                                    centroided = TRUE,
                                    mode = "onDisk")
 
@@ -67,7 +98,7 @@ qc_plot <- function(output,
     hist(log10(intensities),
          freq = FALSE,
          ylim = c(0, 1.1),
-         main = basename(file_in))
+         main = paste0(basename(file_in), " / MS", msLevel))
 
     abline(v = quantile(log10(intensities),
                         probs = percentile,
