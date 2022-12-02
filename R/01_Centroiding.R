@@ -29,8 +29,15 @@ perform_centroiding <- function(input,
                       ms2_pick_refineMz = settings$ms2_pick_refineMz,
                       ms2_pick_signalPercentage = settings$ms2_pick_signalPercentage)
   
+  # write overview file if all samples could be processed
   write.csv(cbind(path = basename(profile_files),
                   success = success),
+            paste0(output, "/success.csv"),
+            row.names = FALSE)
+  
+  # write summary file required by SLAW
+  write.csv(cbind(path = basename(profile_files),
+                  type = "sample"),
             paste0(output, "/summary.csv"),
             row.names = FALSE)
   

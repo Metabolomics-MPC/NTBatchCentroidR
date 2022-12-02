@@ -105,7 +105,7 @@ perform_centroiding(input,
 # 2. intensity QC plots
 # ==============================================================================
 # source required functions ----------------------------------------------------
-source("R/02_qcplot.R")
+source("R/02_QCplot.R")
 
 # perform QC plotting
 qc_plot(output,

@@ -20,11 +20,11 @@ qc_plot <- function(output,
                          outdir = paste0(output, "/qc_plots"))
   
   
-  success_data <- read.csv(paste0(output, "/summary.csv"))
+  success_data <- read.csv(paste0(output, "/success.csv"))
   
   write.csv(cbind(success_data,
                   perc_int = unlist(percentile)),
-            paste0(output, "/summary.csv"),
+            paste0(output, "/success.csv"),
             row.names = FALSE)
   
 }
@@ -66,7 +66,8 @@ qc_plot <- function(output,
 
     hist(log10(intensities),
          freq = FALSE,
-         ylim = c(0, 1.1))
+         ylim = c(0, 1.1),
+         main = basename(file_in))
 
     abline(v = quantile(log10(intensities),
                         probs = percentile,
