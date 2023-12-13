@@ -38,7 +38,7 @@ perform_centroiding <- function(input,
   # write summary file required by SLAW
   write.csv(cbind(path = basename(profile_files),
                   type = "sample"),
-            paste0(output, "/summary.csv"),
+            paste0(output, "/samples.csv"),
             row.names = FALSE)
   
 }
