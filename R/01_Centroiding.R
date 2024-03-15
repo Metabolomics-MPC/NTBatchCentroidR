@@ -36,8 +36,12 @@ perform_centroiding <- function(input,
             row.names = FALSE)
   
   # write summary file required by SLAW
-  write.csv(cbind(path = basename(profile_files),
-                  type = "sample"),
+  study_files <- data.frame(path = basename(profile_files),
+                            type = str_extract(basename(profile_files), "CMTRX|MTRX|blank"))
+  
+  study_files$type[which(is.na(study_files$type))] <- "sample"
+  
+  write.csv(study_files,
             paste0(output, "/samples.csv"),
             row.names = FALSE)
   

@@ -2,3 +2,4 @@
 library(MSnbase)
 library(BiocParallel)
 library(yaml)
+library(stringr)
