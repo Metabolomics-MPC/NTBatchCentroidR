@@ -39,8 +39,14 @@ perform_centroiding <- function(input,
   study_files <- data.frame(path = basename(profile_files),
                             type = str_extract(basename(profile_files), "CMTRX|MTRX|blank"))
   
+  # convert MPC naming to SLAW compatible
   study_files$type[which(is.na(study_files$type))] <- "sample"
+  study_files$type[which(study_files$type == "CMTRX")] <- "QC"
+  study_files$type[which(study_files$type == "MTRX")] <- "sample"
+  study_files$type[which(study_files$type == "blank")] <- "blank"
+  study_files$type[which(grepl("_MS", study_files$path))] <- "MS2"
   
+  # write SLAW compatible file
   write.csv(study_files,
             paste0(output, "/samples.csv"),
             row.names = FALSE)
