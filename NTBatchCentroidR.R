@@ -30,11 +30,13 @@ if(!length(args)) {
   if(!dir.exists(args[1])) {
     stop(paste0("Input folder ", args[1], " does not exist!"))
   }
-  
+
   # check if settings file is present in input
-  if(!file.exists(paste0(args[1], "/settings.yaml"))) {
-    stop("Missing settings.yaml in input folder!")
-  }
+  if(!any(file.exists(c(paste0(args[1], "/settings.yaml"), paste0(args[1], "/centroid_settings.yaml"))))) {
+    print("here")
+    stop("Missing settings.yaml or centroid_settings.yaml in input folder!")
+  } 
+  
   
   # check if mzML files exist in input folder
   mzML_files <- list.files(args[1],
@@ -49,9 +51,15 @@ if(!length(args)) {
     dir.create(args[2])
   }
   
+  # collect all inputs for script
   input <- args[1]
   output <- args[2]
-  settings_file <- paste0(input, "/settings.yaml")
+  
+  if(file.exists(paste0(input, "/settings.yaml"))) {
+    settings_yaml <- paste0(input, "/settings.yaml")
+  } else if(file.exists(paste0(input, "/centroid_settings.yaml"))) {
+    settings_yaml <- paste0(input, "/centroid_settings.yaml")
+  }
   
   print(paste0("Processing files in: ", input))
   print(paste0("Storing files in: ", output))
