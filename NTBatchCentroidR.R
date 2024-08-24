@@ -56,9 +56,9 @@ if(!length(args)) {
   output <- args[2]
   
   if(file.exists(paste0(input, "/settings.yaml"))) {
-    settings_yaml <- paste0(input, "/settings.yaml")
+    settings_file <- paste0(input, "/settings.yaml")
   } else if(file.exists(paste0(input, "/centroid_settings.yaml"))) {
-    settings_yaml <- paste0(input, "/centroid_settings.yaml")
+    settings_file <- paste0(input, "/centroid_settings.yaml")
   }
   
   print(paste0("Processing files in: ", input))
